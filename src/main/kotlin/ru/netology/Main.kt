@@ -100,10 +100,6 @@ class WallService {
         return posts.find { it.id == id } // Возвращаем пост с указанным ID, если он есть, иначе null
     }
 
-    // Метод для очистки списка постов
-    fun clear() {
-        posts.clear() // Очищаем список постов
-    }
 }
 
 // Основная функция для запуска приложения
@@ -131,7 +127,7 @@ fun main() {
     val videoAttachment = VideoAttachment(video = video)
 
     // Создаем пост с вложениями
-    val post = Post(
+    Post(
         text = "Мой пост с фото и видео",
         attachments = arrayOf(photoAttachment, videoAttachment) // Добавляем вложения в массив
     )
