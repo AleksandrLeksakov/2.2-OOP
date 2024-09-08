@@ -57,11 +57,6 @@ data class DocumentAttachment(override val type: String = "doc", val document: D
 data class LinkAttachment(override val type: String = "link", val link: Link) : Attachment
 
 
-
-
-
-
-
 // Data-класс для представления комментариев к посту
 data class Comments(
     val count: Int = 0, // Количество комментариев
@@ -136,7 +131,7 @@ fun main() {
     val videoAttachment = VideoAttachment(video = video)
 
     // Создаем пост с вложениями
-  val post = Post(
+    val post = Post(
         text = "Мой пост с фото и видео",
         attachments = arrayOf(photoAttachment, videoAttachment) // Добавляем вложения в массив
     )
