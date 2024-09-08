@@ -1,8 +1,7 @@
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import ru.netology.Post
-import ru.netology.WallService
+import ru.netology.*
 
 class WallServiceTest {
     private lateinit var service: WallService
@@ -34,10 +33,40 @@ class WallServiceTest {
 
     @Test
     fun `update should return false when post with non-existing id is updated`() {
-        val post = service.add(Post(text = "Post")) // Добавляем пост в список
+        service.add(Post(text = "Post")) // Добавляем пост в список
         assertFalse(service.update(Post(id = 999, text = "Non-existing post")))
 
         // Проверяем, что пост с id 999 не добавлен в список
         assertEquals(1, service.posts.size) // Проверяем, что в списке постов только один элемент
+    }
+
+    @Test
+    fun addPostWithAudioAttachment() {
+        val audio = Audio(1, 1, "Artist", "Title", 180)
+        val audioAttachment = AudioAttachment(audio = audio)
+        val postWithAttachment = Post(text = "Post with audio", attachments = arrayOf(audioAttachment))
+        val newPost = service.add(postWithAttachment)
+        assertEquals(1, newPost.attachments.size)
+        assertEquals("audio", newPost.attachments[0].type)
+    }
+
+    @Test
+    fun addPostWithDocumentAttachment() {
+        val document = Document(1, 1, "Document Title", 100)
+        val documentAttachment = DocumentAttachment(document = document)
+        val postWithAttachment = Post(text = "Post with document", attachments = arrayOf(documentAttachment))
+        val newPost = service.add(postWithAttachment)
+        assertEquals(1, newPost.attachments.size)
+        assertEquals("doc", newPost.attachments[0].type)
+    }
+
+    @Test
+    fun addPostWithLinkAttachment() {
+        val link = Link("https://vk.com/", "VK", "Social Network")
+        val linkAttachment = LinkAttachment(link = link)
+        val postWithAttachment = Post(text = "Post with link", attachments = arrayOf(linkAttachment))
+        val newPost = service.add(postWithAttachment)
+        assertEquals(1, newPost.attachments.size)
+        assertEquals("link", newPost.attachments[0].type)
     }
 }

@@ -17,8 +17,50 @@ data class Post(
     val postponedId: Int = 0, // ID отложенной публикации
     val views: Int? = null, // Число просмотров поста (может быть null)
     val comments: Comments = Comments(), // Комментарии к посту
-    val likes: Likes = Likes() // Лайки к посту
+    val likes: Likes = Likes(),// Лайки к посту
+    val attachments: Array<Attachment> = emptyArray() // Массив для хранения вложений
 )
+
+
+interface Attachment {
+    val type: String
+}
+
+// Фото
+data class Photo(val id: Int, val ownerId: Int, val photo130: String, val photo604: String)
+
+// Видео
+data class Video(val id: Int, val ownerId: Int, val title: String, val duration: Int)
+
+// Аудио
+data class Audio(val id: Int, val ownerId: Int, val artist: String, val title: String, val duration: Int)
+
+// Документ
+data class Document(val id: Int, val ownerId: Int, val title: String, val size: Int)
+
+// Ссылка
+data class Link(val url: String, val title: String, val description: String)
+
+// Фото вложение
+data class PhotoAttachment(override val type: String = "photo", val photo: Photo) : Attachment
+
+// Видео вложение
+data class VideoAttachment(override val type: String = "video", val video: Video) : Attachment
+
+// Аудио вложение
+data class AudioAttachment(override val type: String = "audio", val audio: Audio) : Attachment
+
+// Документ вложение
+data class DocumentAttachment(override val type: String = "doc", val document: Document) : Attachment
+
+// Ссылка вложение
+data class LinkAttachment(override val type: String = "link", val link: Link) : Attachment
+
+
+
+
+
+
 
 // Data-класс для представления комментариев к посту
 data class Comments(
@@ -84,4 +126,18 @@ fun main() {
 
     val post3 = service.getById(999) // Пытаемся получить пост с несуществующим ID
     println("Post with ID 999: ${post3}") // Выводим результат (должно быть null)
+
+    // Создаем фото-вложение
+    val photo = Photo(1, 1, "https://vk.com/some_photo_link", "https://vk.com/another_photo_link")
+    val photoAttachment = PhotoAttachment(photo = photo)
+
+    // Создаем видео-вложение
+    val video = Video(1, 1, "Funny Video", 30)
+    val videoAttachment = VideoAttachment(video = video)
+
+    // Создаем пост с вложениями
+  val post = Post(
+        text = "Мой пост с фото и видео",
+        attachments = arrayOf(photoAttachment, videoAttachment) // Добавляем вложения в массив
+    )
 }
